@@ -1,5 +1,5 @@
-ESX                           = nil
-local PlayerData       = {}
+ESX = nil
+local PlayerData = {}
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -12,8 +12,6 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
   PlayerData = xPlayer
 	TriggerServerEvent("esx:playerconnected")
-
-
 end)
 
 RegisterNetEvent('esx:setJob')
@@ -21,11 +19,10 @@ AddEventHandler('esx:setJob', function(job)
   PlayerData.job = job
 end)
 
-local isJacking = true
-local isStolen = true
+local isJacking, isStolen = true, true
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(10)
 
 		if(IsPedInAnyVehicle(GetPlayerPed(-1)))then
 			local playerPed = GetPlayerPed(-1)
@@ -60,26 +57,17 @@ Citizen.CreateThread(function()
 
 					isJacking = false
 					vehicle = nil
-
 				end
 		else
 			isJacking = true
 		end
-
-
-
-
 	end
 end)
-
-
-
-
 
 local isIncarPolice = false
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(10)
 
 		if(IsPedInAnyPoliceVehicle(GetPlayerPed(-1))) then
 				if(settings.LogEnterPoliceVehicle == true and not isIncarPolice and PlayerData.job.name ~= "police") then
@@ -100,8 +88,7 @@ end)
 local isIncar = false
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
-
+		Citizen.Wait(10)
 
 		if(IsPedInAnyVehicle(GetPlayerPed(-1)) and not IsPedInAnyPoliceVehicle(GetPlayerPed(-1))) then
 
@@ -118,12 +105,8 @@ Citizen.CreateThread(function()
 		else
 			isIncar = false
 		end
-
 	end
 end)
-
-
-
 
 local base = 0
 Citizen.CreateThread(function()
@@ -183,10 +166,8 @@ Citizen.CreateThread(function()
     end
 end)
 
-
-
 function GetPlayerByEntityID(id)
-	for i=0,32 do
+	for i,player in ipairs(GetActivePlayers()) do
 		if(NetworkIsPlayerActive(i) and GetPlayerPed(i) == id) then return i end
 	end
 	return nil
